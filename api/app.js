@@ -3,6 +3,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import User from "./models/user.js";
+import Note from "./models/note.model.js";
+import auth from "./middlewares/auth.middleware.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -95,7 +97,7 @@ app.get("/profile", (req, res) => {
       return res.status(403).json({ message: "Invalid token" });
     }
     const user = await User.findById(data.userId);
-    return res.json({ user});
+    return res.json({ user });
   });
 });
 
@@ -105,4 +107,73 @@ app.post("/logout", (req, res) => {
   }
   res.clearCookie("token");
   res.json({ message: "Logged out" });
+});
+
+app.post("/new-note", auth, async (req, res) => {
+  const { title, content, tags, isPinned } = req.body;
+  const userData = req.userId;
+
+  const note = new Note({
+    userId: userData,
+    title,
+    content,
+    tags,
+    isPinned,
+  });
+  await note.save();
+  return res.json({ message: "Note created" });
+});
+
+app.get("/notes", auth, async (req, res) => {
+  const userData = req.userId;
+  try {
+    const notes = await Note.find({ userId: userData });
+    return res.json({ notes });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.put("/edit/:id", auth, async (req, res) => {
+  const { title, content, tags, isPinned } = req.body;
+  const { id } = req.params;
+  const userData = req.userId;
+
+  if (!title && !content && !tags && !isPinned) {
+    return res.status(400).json({ message: "No changes to make" });
+  }
+
+  const note = await Note.findOne({ _id: id });
+  if (!note) {
+    return res.status(404).json({ message: "Note not found" });
+  }
+
+  if (note.userId.toString() !== userData) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  note.set({
+    title: title || note.title,
+    content: content || note.content,
+    tags: tags || note.tags,
+    isPinned: isPinned || note.isPinned,
+  });
+  await note.save();
+  return res.json({ message: "Note updated" });
+});
+
+app.delete("/delete/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  const userData = req.userId;
+
+  Note.findByIdAndDelete({ _id: id, userId: userData })
+    .then((note) => {
+      if (!note) {
+        return res.status(404).json({ message: "Note not found" });
+      }
+      return res.json({ message: "Note deleted" });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
+    });
 });
