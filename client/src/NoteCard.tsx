@@ -1,5 +1,6 @@
 import { type Note } from "./types";
 import { useState, useEffect } from "react";
+import TagsInput from "./TagInput";
 interface NoteCardProps {
   note: Note;
 }
@@ -8,7 +9,7 @@ export default function NoteCard({ note }: NoteCardProps) {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(note.title); // Inicializar con el valor de la nota
   const [content, setContent] = useState<string>(note.content); // Inicializar con el valor de la nota
-  const [tags, setTags] = useState<string>(note.tags); // Inicializar con el valor de la nota
+  const [tags, setTags] = useState<string[]>(note.tags); // Inicializar con el valor de la nota
   const [isPinned, setIsPinned] = useState<boolean>(note.isPinned);
 
   const handleEditNote = async () => {
@@ -31,7 +32,7 @@ export default function NoteCard({ note }: NoteCardProps) {
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
-    setTags(note.tags);
+    setTags([...note.tags]);
     setIsPinned(note.isPinned);
   }, [note]);
 
@@ -43,8 +44,9 @@ export default function NoteCard({ note }: NoteCardProps) {
         <p>{note.tags}</p>
         <p>{note.isPinned}</p>
       </div>
-      {!isOpened && <button onClick={() => setIsOpened(true)}>Edit</button>}
-      {isOpened && (
+      {!isOpened ? (
+        <button onClick={() => setIsOpened(true)}>Edit</button>
+      ) : (
         <div className="bg-green">
           <button onClick={() => setIsOpened(false)}>Close</button>
           <form onSubmit={handleEditNote}>
@@ -59,12 +61,7 @@ export default function NoteCard({ note }: NoteCardProps) {
               placeholder="Content"
               onChange={(e) => setContent(e.target.value)}
             />
-            <input
-              value={tags}
-              type="text"
-              placeholder="Tags"
-              onChange={(e) => setTags(e.target.value)}
-            />
+            <TagsInput tags={tags} setTags={setTags} />
             <button onSubmit={handleEditNote}>Guardar</button>
           </form>
         </div>

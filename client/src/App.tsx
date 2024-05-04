@@ -1,25 +1,29 @@
 import "./App.css";
 import Login from "./Login";
-import SignIn from "./SigIn";
 import Logout from "./Logout";
-import NoteComponent from "./Note";
 import Notes from "./Notes";
-import { useState } from "react";
 import { UserProvider } from "./userContext.tsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import SignUp from "./SignUp.tsx";
+import Header from "./Header.tsx";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
   return (
-    <>
+    <BrowserRouter>
       <UserProvider>
-        <Login />
-        <SignIn />
-        <Logout />
-        <button onClick={() => setIsOpen(true)}>Open</button>
-        {isOpen && <NoteComponent />}
-        <Notes />
+        <ToastContainer />
+        <Header/>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
       </UserProvider>
-    </>
+    </BrowserRouter>
   );
 }
 

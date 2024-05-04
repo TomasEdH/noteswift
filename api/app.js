@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 dotenv.config();
 
 const cookieConfig = {
-  httpOnly: true,
+  httpOnly: false,
   secure: false,
   sameSite: "lax",
 };
@@ -105,7 +105,7 @@ app.post("/logout", (req, res) => {
   if (!req.cookies.token) {
     return res.status(400).json({ message: "User not logged in" });
   }
-  res.clearCookie("token");
+  res.cookie("token", "", { expires: new Date(0) });
   res.json({ message: "Logged out" });
 });
 

@@ -5,26 +5,19 @@ export const UserContext = React.createContext<UserContextType | null>(null);
 
 export const UserProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    console.log('user', user);
+
     useEffect(() => {
         if(!user) {
-            const getUser = async () => {
-                try {
-                    const res = await fetch("http://localhost:1235/profile", {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        credentials: "include",
-                    });
-                    const data = await res.json();
-                    setUser(data);
-                    console.log('data contexto', data);
-                } catch (err) {
-                    console.log(err);
-                }
-            };
-            getUser();
+            fetch("http://localhost:1235/profile", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            }).then((res) => res.json())
+            .then((data) => {
+                setUser(data);
+            })
         }
     }, [user]);
 

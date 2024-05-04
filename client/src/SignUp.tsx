@@ -1,49 +1,61 @@
 import React, { useState } from "react";
-import { useContext } from "react";
-import { UserContext } from "./userContext";
-import { UserContextType } from "./types";
 import { Link, Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import {toast} from "react-toastify";
 
-export default function Login() {
+export default function Sign() {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [redirect, setRedirect] = useState<boolean>(false);
-  const { setUser } = useContext(UserContext) as UserContextType;
-  const token = Cookies.get("token");
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:1235/login", {
+      const res = await fetch("http://localhost:1235/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
+        body: JSON.stringify({ name, email, password }),
       });
       const data = await res.json();
-      setUser(data);
       setRedirect(true);
+      if(res.status === 201){
+        toast.success(data.message, {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+      }
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  if (redirect) {
-    return <Navigate to="/notes" />;
+  if(redirect) {
+    return <Navigate to="/login" />
   }
-
-  if (token) {
-    return <Navigate to="/notes" />;
-  }
-
 
   return (
-    <div className="max-w-[1000px] min-h-screen my-0 mx-auto flex flex-col justify-center">
+    <>
+     <div className="max-w-[1000px] min-h-screen my-0 mx-auto flex flex-col justify-center">
       <form onSubmit={handleSubmit} className="w-[50%] mx-auto flex flex-col">
+      <div className="mb-5">
+          <label
+            htmlFor="name"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Your name
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="name@flowbite.com"
+            required
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
         <div className="mb-5">
           <label
             htmlFor="email"
@@ -60,13 +72,12 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
         <div className="mb-5">
           <label
             htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your password
+            Create password
           </label>
           <input
             type="password"
@@ -80,21 +91,22 @@ export default function Login() {
           type="submit"
           className="text-white justify-center mx-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Submit
+          Register
         </button>
       </form>
 
-      <div className="w-[50%] mx-auto mt-5">
-        <p className="text-center">
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-blue-700 hover:underline dark:text-blue-400"
-          >
-            Register
-          </Link>
-        </p>
-      </div>
+        <div className="w-[50%] mx-auto mt-5">
+            <p className="text-center">
+            Already have an account?{" "}
+            <Link
+                to="/login"
+                className="text-blue-700 hover:underline dark:text-blue-400"
+            >
+                Login
+            </Link>
+            </p>
+        </div>
     </div>
+    </>
   );
 }

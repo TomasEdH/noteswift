@@ -12,22 +12,14 @@ const TagInput = ({ tags, setTags }: TagInputProps) => {
     setInputValue(e.target.value);
   };
 
-  const addNewTag = () => {
+  const addNewTag = (e: React.FormEvent) => {
+    e.preventDefault();
     if (inputValue.trim() !== "") {
-      setTags([...tags] + inputValue.trim());
+      setTags([...tags, inputValue.trim()]);
       setInputValue("");
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      addNewTag();
-    }
-  };
-  
-  const handleRemoveTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
-  }
 
   return (
     <section>
@@ -47,15 +39,16 @@ const TagInput = ({ tags, setTags }: TagInputProps) => {
           </div>
         )}
       </div>
-      <div>
+      {/* creamos un nuevo formulario para evitar que envie automaticamente el formulario del componente NoteComponent al agregar una nueva nota */}
+      <form onSubmit={addNewTag}>
         <input
           type="text"
+          value={inputValue}
           placeholder="Tags"
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
         />
-        <button onClick={() => addNewTag()}>Add tag</button>
-      </div>
+        <button onClick={addNewTag}>Add tag</button>
+      </form>
     </section>
   );
 };
