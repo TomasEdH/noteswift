@@ -8,4 +8,10 @@
 
 body {
   overflow-x: hidden;
+  background-color: #fff;
+  color: #000;
+  .dark & {
+    background-color: #1e1e1e;
+    color: #e2e8f0;
+  }
 }

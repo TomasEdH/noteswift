@@ -42,7 +42,7 @@ export default function Login() {
 
 
   return (
-    <div className="max-w-[1000px] min-h-screen my-0 mx-auto flex flex-col justify-center">
+    <div className="max-w-[1000px] my-0 mx-auto flex flex-col justify-center">
       <form onSubmit={handleSubmit} className="w-[50%] mx-auto flex flex-col">
         <div className="mb-5">
           <label
