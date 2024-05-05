@@ -4,7 +4,7 @@ export interface User {
     email: string;
     name: string;
     password: string;
-    __v: number
+    __v?: number
 }
 
 export interface UserContextType {
@@ -17,6 +17,7 @@ export type Note = {
     title: string;
     content: string;
     tags: string[];
-    isPinned: boolean;
-    __v: number;
+    isPinned?: boolean;
+    createdAt: string;
+    __v?: number;
 }
