@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { query } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import User from "./models/user.js";
@@ -110,7 +110,7 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/new-note", auth, async (req, res) => {
-  const { title, content, tags, isPinned } = req.body;
+  const { title, content, tags } = req.body;
   const userData = req.userId;
 
   const note = new Note({
@@ -118,7 +118,7 @@ app.post("/new-note", auth, async (req, res) => {
     title,
     content,
     tags,
-    isPinned,
+    
   });
   await note.save();
   return res.json({ message: "Note created" });
@@ -135,11 +135,11 @@ app.get("/notes", auth, async (req, res) => {
 });
 
 app.put("/edit/:id", auth, async (req, res) => {
-  const { title, content, tags, isPinned } = req.body;
+  const { title, content, tags } = req.body;
   const { id } = req.params;
   const userData = req.userId;
 
-  if (!title && !content && !tags && !isPinned) {
+  if (!title && !content && !tags) {
     return res.status(400).json({ message: "No changes to make" });
   }
 
@@ -156,7 +156,6 @@ app.put("/edit/:id", auth, async (req, res) => {
     title: title || note.title,
     content: content || note.content,
     tags: tags || note.tags,
-    isPinned: isPinned || note.isPinned,
   });
   await note.save();
   return res.json({ message: "Note updated" });
@@ -176,4 +175,51 @@ app.delete("/delete/:id", auth, async (req, res) => {
     .catch((error) => {
       return res.status(500).json({ error: error.message });
     });
+});
+
+app.get('/notes/search', auth, async (req, res) => {
+  const { searchTerm } = req.query;
+  const userId = req.userId;
+
+  try {
+    // Crear una expresión regular para buscar coincidencias en título, contenido y tags
+    const searchRegex = new RegExp(searchTerm, 'i');
+
+    // Consulta para buscar notas que coincidan con el término de búsqueda
+    const notes = await Note.find({
+      userId,
+      $or: [
+        { title: { $regex: searchRegex } },
+        { content: { $regex: searchRegex } },
+        { tags: { $elemMatch: { $regex: searchRegex } } }
+      ]
+    });
+
+    res.json({ notes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.put("/pin/:noteId", auth, async (req, res) => {
+  const { noteId } = req.params;
+  const { isPinned } = req.body;
+  const userData = req.userId;
+
+  try {
+    const note = await Note.findOneAndUpdate(
+      { _id: noteId, userId: userData },
+      { isPinned },
+      { new: true }
+    );
+
+    if (!note) {
+      return res.status(400).json({ message: "No notes to pin" });
+    }
+
+    return res.json({ message: "Note pinned", note });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });

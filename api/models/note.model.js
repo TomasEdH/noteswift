@@ -21,6 +21,10 @@ const noteSchema = new mongoose.Schema({
     isPinned: {
         type: Boolean,
         required: false
+    },
+    createdAt: {
+        type: Date,
+        default: new Date().getTime()
     }
 })
 
