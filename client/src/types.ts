@@ -21,3 +21,8 @@ export type Note = {
     createdAt: string;
     __v?: number;
 }
+
+export enum Theme {
+    LIGHT = "light",
+    DARK = "dark"
+}
