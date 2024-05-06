@@ -4,7 +4,7 @@ import { IoAdd } from "react-icons/io5";
 
 interface TagInputProps {
   tags: string[];
-  setTags: (tags: string[]) => void;
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const TagInput = ({ tags, setTags }: TagInputProps) => {

@@ -118,7 +118,6 @@ app.post("/new-note", auth, async (req, res) => {
     title,
     content,
     tags,
-    
   });
   await note.save();
   return res.json({ message: "Note created" });
@@ -177,13 +176,13 @@ app.delete("/delete/:id", auth, async (req, res) => {
     });
 });
 
-app.get('/notes/search', auth, async (req, res) => {
+app.get("/notes/search", auth, async (req, res) => {
   const { searchTerm } = req.query;
   const userId = req.userId;
 
   try {
     // Crear una expresión regular para buscar coincidencias en título, contenido y tags
-    const searchRegex = new RegExp(searchTerm, 'i');
+    const searchRegex = new RegExp(searchTerm, "i");
 
     // Consulta para buscar notas que coincidan con el término de búsqueda
     const notes = await Note.find({
@@ -191,14 +190,14 @@ app.get('/notes/search', auth, async (req, res) => {
       $or: [
         { title: { $regex: searchRegex } },
         { content: { $regex: searchRegex } },
-        { tags: { $elemMatch: { $regex: searchRegex } } }
-      ]
+        { tags: { $elemMatch: { $regex: searchRegex } } },
+      ],
     });
 
     res.json({ notes });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
