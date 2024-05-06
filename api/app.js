@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import  emailValidator  from 'deep-email-validator'
 
 const app = express();
 const PORT = process.env.PORT;
@@ -43,6 +44,8 @@ app.get("/test", (req, res) => {
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   const userExists = await User.findOne({ email });
+
+  if(!name || !email || !password) return res.status(400).json({ message: "Missing fields" });
 
   if (userExists) {
     return res.status(400).json({ message: "User already exists" });
