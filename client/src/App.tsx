@@ -1,6 +1,5 @@
 import "./App.css";
 import Login from "./Login";
-import Logout from "./Logout";
 import Notes from "./Notes";
 import { UserProvider } from "./userContext.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -37,7 +36,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/logout" element={<Logout />} />
           </Routes>
       </UserProvider>
     </BrowserRouter>

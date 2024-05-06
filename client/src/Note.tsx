@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import TagInput from "./TagInput.tsx";
 import { IoClose } from "react-icons/io5";
+import { Note } from "./types.ts";
 
 interface Props {
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
 }
 
-export default function NoteComponent({ setIsOpen }: Props) {
+export default function NoteComponent({ setIsOpen, setNotes }: Props) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
@@ -23,8 +25,9 @@ export default function NoteComponent({ setIsOpen }: Props) {
         body: JSON.stringify({ title, content, tags }),
         credentials: "include",
       });
-      const data = await res.json();
-      console.log(data);
+      const newNote = await res.json();
+      setNotes(prevNotes => [...prevNotes, newNote])
+      setIsOpen(false);
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -36,7 +39,9 @@ export default function NoteComponent({ setIsOpen }: Props) {
       <div className="rounded-md dark:bg-[#1e1e1e] text-black bg-white p-4">
         <form
           className="flex flex-col gap-7 w-[700px]"
-          onSubmit={handleCreateNote}
+          onSubmit={(e) => {
+            handleCreateNote(e)
+          }}
         >
           <div className="flex justify-between gap-x-5">
             <input
@@ -60,7 +65,6 @@ export default function NoteComponent({ setIsOpen }: Props) {
             disabled={!title || !content}
             className='disabled:bg-primary/40 disabled:text-black/30 disabled:pointer-events-none bg-primary mx-10 px-4 py-2 rounded-lg hover:bg-primary transition-all durations-300 hover:scale-105 font-medium hover:cursor-pointer'
             type="submit"
-            onClick={() => setIsOpen(false)}
           >
             Agregar
           </button>

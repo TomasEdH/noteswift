@@ -90,6 +90,7 @@ export default function Notes() {
               note={note}
               updateNotesOrder={updateNotesOrder}
               deleteNote={deleteNote}
+              setIsOpen={setIsOpen}
             />
           ))}
         </ul>
@@ -103,7 +104,7 @@ export default function Notes() {
       >
         Crear nota<MdAddCircleOutline size={23}/>
       </button>
-      {isOpen && <NoteComponent setIsOpen={setIsOpen} />}
+      {isOpen && <NoteComponent setNotes={setNotes} setIsOpen={setIsOpen} />}
     </div>
   );
 }

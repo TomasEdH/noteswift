@@ -1,26 +1,29 @@
 import { type Note } from "./types";
 import { useState, useEffect } from "react";
-import TagsInput from "./TagInput";
+import TagInput from "./TagInput";
 import { RiEditLine } from "react-icons/ri";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { RiPushpin2Line } from "react-icons/ri"
 import { RiPushpin2Fill } from "react-icons/ri";
+import { IoClose } from "react-icons/io5";
 
 interface NoteCardProps {
   note: Note;
   updateNotesOrder: (updatedNote: Note) => void;
   deleteNote: (id: number) => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 export default function NoteCard({
   note,
   updateNotesOrder,
   deleteNote,
+  setIsOpen
 }: NoteCardProps) {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(note.title);
   const [content, setContent] = useState<string>(note.content);
-  const [tags, setTags] = useState<string[]>(note.tags);
+  const [tags, setTags] = useState<string[]>(note.tags) ;
 
   const handleUpdatePin = async () => {
     try {
@@ -70,10 +73,12 @@ export default function NoteCard({
     }
   };
 
+  console.log([note.tags]);
+
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
-    setTags([...note.tags]);
+    setTags(note.tags);
   }, [note]);
 
   return (
@@ -89,12 +94,14 @@ export default function NoteCard({
           </h1>
         </div>
         <p className="opacity-70 font-medium">
-          {note.createdAt.split("T").slice(0, 1)}
+          {note.createdAt?.split("T").slice(0, 1)}
         </p>
         <p className="truncate">{note.content}</p>
         <div className="flex items-center gap-x-2 truncate">
-          {note.tags.map((tag) => (
-            <p className="opacity-70 font-medium">#{tag}</p>
+          {note.tags && note.tags.map((tag, index) => (
+            <p key={index} className="font-medium opacity-65">
+              #{tag}
+            </p>
           ))}
         </div>
         <div className="flex justify-end gap-x-2">
@@ -107,25 +114,43 @@ export default function NoteCard({
         </div>
       </div>
       {isOpened && (
-        <div>
-          <div className="bg-green">
-            <form onSubmit={handleEditNote}>
+        <div className="fixed flex inset-0 z-10 bg-black bg-opacity-50 justify-center items-center text-white">
+        <div className="rounded-md dark:bg-[#1e1e1e] text-black bg-white p-4">
+          <form
+            className="flex flex-col gap-7 w-[700px]"
+            onSubmit={handleEditNote}
+          >
+            <div className="flex justify-between gap-x-5">
               <input
-                value={title}
                 type="text"
-                placeholder="Title"
+                value={title}
+                spellCheck="false"
+                placeholder="Estudiar para mi próximo examen"
+                className="py-3 px-2 text-3xl rounded-lg bg-transparent outline-none flex-1 h-12"
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <textarea
-                value={content}
-                placeholder="Content"
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <TagsInput tags={tags} setTags={setTags} />
-              <button onSubmit={handleEditNote}>Guardar</button>
-            </form>
-          </div>
+              <button onClick={() => setIsOpen(false)} className="mr-3">
+                <IoClose size={23} />
+              </button>
+            </div>
+            <textarea
+              value={content}
+              placeholder="¿Qué deseas anotar?"
+              className=" p-2 rounded-lg h-[400px] resize-none bg-slate-200/50 outline-none"
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <TagInput tags={tags} setTags={setTags} />
+            <button
+              disabled={!title || !content}
+              className='disabled:bg-primary/40 disabled:text-black/30 disabled:pointer-events-none bg-primary mx-10 px-4 py-2 rounded-lg hover:bg-primary transition-all durations-300 hover:scale-105 font-medium hover:cursor-pointer'
+              type="submit"
+              onClick={() => setIsOpen(false)}
+            >
+              Agregar
+            </button>
+          </form>
         </div>
+      </div>
       )}
     </section>
   );
