@@ -191,7 +191,6 @@ app.get("/notes/search", auth, async (req, res) => {
       userId,
       $or: [
         { title: { $regex: searchRegex } },
-        { content: { $regex: searchRegex } },
         { tags: { $elemMatch: { $regex: searchRegex } } },
       ],
     });
