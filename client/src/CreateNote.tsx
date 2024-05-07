@@ -8,7 +8,7 @@ interface Props {
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
 }
 
-export default function NoteComponent({ setIsOpen, setNotes }: Props) {
+export default function CreateNote({ setIsOpen, setNotes }: Props) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);

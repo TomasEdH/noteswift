@@ -3,9 +3,9 @@ import { type Note } from "./types";
 import NoteCard from "./NoteCard";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import NoteComponent from "./Note";
 import { MdAddCircleOutline } from "react-icons/md";
 import EmptyNotes from "./EmptyNotes";
+import CreateNote from "./CreateNote";
 
 
 export default function Notes() {
@@ -104,7 +104,7 @@ export default function Notes() {
       >
         Crear nota<MdAddCircleOutline size={23}/>
       </button>
-      {isOpen && <NoteComponent setNotes={setNotes} setIsOpen={setIsOpen} />}
+      {isOpen && <CreateNote setNotes={setNotes} setIsOpen={setIsOpen} />}
     </div>
   );
 }

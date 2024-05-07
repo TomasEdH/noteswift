@@ -10,7 +10,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import  emailValidator  from 'deep-email-validator'
 
 const app = express();
 const PORT = process.env.PORT;
