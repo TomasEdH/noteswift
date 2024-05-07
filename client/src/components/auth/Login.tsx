@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useContext } from "react";
-import { UserContext } from "./userContext";
-import { UserContextType } from "./types";
+import { UserContext } from "../../userContext";
+import { UserContextType } from "../../types";
 import { Link, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -56,7 +56,6 @@ export default function Login() {
             id="email"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="name@flowbite.com"
-            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>

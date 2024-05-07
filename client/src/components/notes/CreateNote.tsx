@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TagInput from "./TagInput.tsx";
 import { IoClose } from "react-icons/io5";
-import { Note } from "./types.ts";
+import { Note } from "../../types.ts";
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;

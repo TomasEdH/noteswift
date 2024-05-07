@@ -1,11 +1,11 @@
 import "./App.css";
-import Login from "./Login";
-import Notes from "./Notes";
+import Login from "./components/auth/Login.tsx";
+import Notes from "./components/notes/Notes.tsx";
 import { UserProvider } from "./userContext.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import SignUp from "./SignUp.tsx";
-import Header from "./Header.tsx";
+import SignUp from "./components/auth/SignUp.tsx";
+import Header from "./components/Header.tsx";
 import { ThemeProvider } from "./ThemeContext.tsx";
 import "react-toastify/dist/ReactToastify.css";
 function App() {

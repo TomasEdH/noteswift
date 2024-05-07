@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import { type Note } from "./types";
+import { type Note } from "../../types";
 import NoteCard from "./NoteCard";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { MdAddCircleOutline } from "react-icons/md";
 import EmptyNotes from "./EmptyNotes";
 import CreateNote from "./CreateNote";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useNotesFns } from "../../hooks/useNotesFns";
 
 
 export default function Notes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const debouncedValue = useDebounce(searchValue, 500);
   const token = Cookies.get("token");
+  const { sortNotes, updateNotesOrder, deleteNote } = useNotesFns({ notes, setNotes });
 
   const searchNotes = async (searchTerm: string) => {
     try {
@@ -37,37 +41,13 @@ export default function Notes() {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const notes = await searchNotes(searchValue);
+      const notes = await searchNotes(debouncedValue);
       setNotes(notes);
     };
 
     fetchNotes();
-  }, [searchValue]);
+  }, [debouncedValue]);
 
-  function sortNotes(notes: Note[]) {
-    return [...notes].sort((a, b) => {
-      if (a.isPinned && !b.isPinned) {
-        return -1;
-      }
-      if (!a.isPinned && b.isPinned) {
-        return 1;
-      }
-
-      return 0;
-    });
-  }
-
-  const updateNotesOrder = (updatedNote: Note) => {
-    const updatedNotes = notes.map((note) =>
-      note._id === updatedNote._id ? updatedNote : note
-    );
-    const sortedNotes = sortNotes(updatedNotes);
-    setNotes(sortedNotes);
-  };
-
-  const deleteNote = async (noteId: number) => {
-    setNotes(notes.filter((note) => note._id !== noteId));
-  }
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -77,7 +57,7 @@ export default function Notes() {
     <div className=" relative flex flex-col items-center mt-10">
       <input
         type="text" 
-        placeholder="Search notes..."
+        placeholder="Search notes by title or tags..."
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         className="border-[2px] border-black/60 dark:border-white p-2 rounded-lg w-96 bg-transparent font-medium text-lg mt-10 outline-none focus:border-primary focus:border-2 "

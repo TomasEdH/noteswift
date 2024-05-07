@@ -1,4 +1,4 @@
-import { type Note } from "./types";
+import { type Note } from "../../types";
 import { useState, useEffect } from "react";
 import TagInput from "./TagInput";
 import { RiEditLine } from "react-icons/ri";

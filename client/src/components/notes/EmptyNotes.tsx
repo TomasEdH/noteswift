@@ -1,8 +1,7 @@
-
-import NoteImg from "./assets/notes-note-svgrepo-com.svg";
-import NoteImgLight from './assets/notes-note-svgrepo-white.svg';
-import { useContext } from "react";
-import { ThemeContext } from "./ThemeContext";
+import { useContext } from 'react';
+import NoteImg from '../../assets/emptynotes.svg';
+import NoteImgLight from '../../assets/emptynotes-white.svg';
+import { ThemeContext } from "../../ThemeContext";
 
 export default function EmptyNotes() {
 

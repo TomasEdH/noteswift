@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "./userContext";
-import { UserContextType } from "./types";
+import { UserContext } from "../userContext";
+import { UserContextType } from "../types";
 import { FaSquarespace } from "react-icons/fa6";
 import { FiMoon } from "react-icons/fi";
 import { FiSun } from "react-icons/fi";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "../ThemeContext";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext) as UserContextType;
@@ -58,7 +58,7 @@ export default function Header() {
     <div className="pt-10 flex justify-around">
       <div className="flex items-center gap-x-2">
         <FaSquarespace size={30} />
-        <h2 className="text-3xl font-medium mb-0.5">taskify</h2>
+        <h2 className="text-3xl font-medium mb-0.5">Note<span className="text-primary">s</span>wift</h2>
       </div>
       <div className="flex items-center gap-x-5">
         <button onClick={toggleTheme}>
