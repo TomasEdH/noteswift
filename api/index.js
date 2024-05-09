@@ -17,6 +17,7 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
 app.use(cors({
   origin: ["http://localhost:3000", "https://noteswift-client.vercel.app"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }))
 app.use(express.json());
@@ -26,7 +27,7 @@ dotenv.config();
 
 const cookieConfig = {
   httpOnly: false,
-  secure: true,
+  secure: false,
   sameSite: "lax",
 };
 
