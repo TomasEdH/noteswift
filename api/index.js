@@ -18,7 +18,7 @@ mongoose.connect(MONGO_URI);
 app.use(
   cors({
     origin: "http://localhost:3000",
-    origin: "https://noteswift-api.vercel.app",
+    origin: "https://noteswift-client.vercel.app",
     credentials: true,
   })
 );
