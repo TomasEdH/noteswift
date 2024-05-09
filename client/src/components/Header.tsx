@@ -6,6 +6,7 @@ import { FaSquarespace } from "react-icons/fa6";
 import { FiMoon } from "react-icons/fi";
 import { FiSun } from "react-icons/fi";
 import { ThemeContext } from "../ThemeContext";
+import { apiUrl } from "../consts";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext) as UserContextType;
@@ -39,7 +40,7 @@ export default function Header() {
     "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
   const logOut = () => {
-    fetch("http://localhost:1235/logout", {
+    fetch(`${apiUrl}/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

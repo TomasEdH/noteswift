@@ -18,6 +18,7 @@ mongoose.connect(MONGO_URI);
 app.use(
   cors({
     origin: "http://localhost:3000",
+    origin: 'https://noteswift.onrender.com',
     credentials: true,
   })
 );

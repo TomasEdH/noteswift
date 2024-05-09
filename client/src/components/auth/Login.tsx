@@ -4,6 +4,7 @@ import { UserContext } from "../../userContext";
 import { UserContextType } from "../../types";
 import { Link, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { apiUrl } from "../../consts";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -16,7 +17,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:1235/login", {
+      const res = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

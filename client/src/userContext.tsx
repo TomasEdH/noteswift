@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { type UserContextType, type User } from "./types";
+import {apiUrl} from './consts'
 
 export const UserContext = React.createContext<UserContextType | null>(null);
 
@@ -8,7 +9,7 @@ export const UserProvider: React.FC<{children: React.ReactNode}> = ({ children }
 
     useEffect(() => {
         if(!user) {
-            fetch("http://localhost:1235/profile", {
+            fetch(`${apiUrl}/profile`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -8,6 +8,7 @@ import EmptyNotes from "./EmptyNotes";
 import CreateNote from "./CreateNote";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useNotesFns } from "../../hooks/useNotesFns";
+import { apiUrl } from "../../consts";
 
 
 export default function Notes() {
@@ -21,7 +22,7 @@ export default function Notes() {
   const searchNotes = async (searchTerm: string) => {
     try {
       const response = await fetch(
-        `http://localhost:1235/notes/search?searchTerm=${searchTerm}`,
+        `${apiUrl}/notes/search?searchTerm=${searchTerm}`,
         {
           method: "GET",
           headers: {

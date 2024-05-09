@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import {toast} from "react-toastify";
+import { apiUrl } from "../../consts";
 
 export default function Sign() {
   const [name, setName] = useState<string>("");
@@ -11,7 +12,7 @@ export default function Sign() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:1235/register", {
+      const res = await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
