@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
 app.use(cors({
-  origin: ["http://localhost:3000", "https://noteswift-client.vercel.app"],
+  origin: '*',
   credentials: true,
 }))
 app.use(express.json());
