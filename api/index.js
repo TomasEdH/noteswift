@@ -15,29 +15,11 @@ const app = express();
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
-
-const allowedOrigins = ["http://localhost:3000", "https://noteswift-client.vercel.app"];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: ["http://localhost:3000", "https://noteswift-client.vercel.app"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-}));
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
-
+}))
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
